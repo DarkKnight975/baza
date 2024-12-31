@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Меню</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1d1e22, #323a45);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #f5f5f5;
+        }
+
+        nav {
+            background: linear-gradient(to right, #721717, #b12020);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand-logo {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.2rem;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #2e323a, #23262e);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+            width: 300px;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 70, 70, 0.6);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 2px solid #721717;
+        }
+
+        .small-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-content {
+            text-align: center;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2196F3;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #f5f5f5;
+        }
+
+        .footer {
+            background: linear-gradient(to right, #232526, #414345);
+            color: #dcdcdc;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: #ff9472;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff9472;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #232526;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 500px;
+            display: none;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .cart-modal.active {
+            display: block;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .close-cart {
+            cursor: pointer;
+            color: #ff9472;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="#" class="brand-logo center">Меблі та Стиль</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/">Меню</a></li>
+            <li><a href="/reviews">Відгуки</a></li>
+            <li><a href="/contacts">Контакти</a></li>
+            <li><a href="/categories">Категорії</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            {% for item in menu_items %}
+                <div class="col s12 m6 l4">
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('{{ item.image_url }}');"></div>
+                        <div class="card-content">
+                            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="small-image">
+                            <span class="card-title">{{ item.name }}</span>
+                            <p class="card-text"><strong>Ціна:</strong> {{ item.price }} UAH</p>
+                            <p class="card-text"><strong>Категорія:</strong> {{ item.category }}</p>
+                            <button class="btn add-to-cart" data-name="{{ item.name }}" data-price="{{ item.price }}">Додати до корзини</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="cart">
+        🛒
+    </div>
+
+    <div class="cart-modal">
+        <h5>Корзина</h5>
+        <div class="cart-items"></div>
+        <button class="btn close-cart">Закрити</button>
+    </div>
+
+    <footer class="footer">
+        © 2024 Меблі та Стиль. <a href="#">Політика конфіденційності</a>.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        const cart = [];
+
+        $(document).on('click', '.add-to-cart', function () {
+            const name = $(this).data('name');
+            const price = $(this).data('price');
+            cart.push({ name, price });
+            alert(`${name} додано до корзини`);
+        });
+
+        $('.cart').click(function () {
+            const modal = $('.cart-modal');
+            const itemsContainer = $('.cart-items');
+            itemsContainer.empty();
+            cart.forEach(item => {
+                itemsContainer.append(`<div class="cart-item"><span>${item.name}</span><span>${item.price} UAH</span></div>`);
+            });
+            modal.addClass('active');
+        });
+
+        $('.close-cart').click(function () {
+            $('.cart-modal').removeClass('active');
+        });
+    </script>
+</body>
+
+</html>
